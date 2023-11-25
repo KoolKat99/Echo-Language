@@ -10,15 +10,24 @@ using namespace std;
 
 //creating a max heap with largest numbers on top
 enum AbstractSyntax {
-    none,
-    number,
-    parentheses,     
+    number,     
     exponent,        
     multiplication,  
     division,        
     addition,        
-    subtraction,     
+    subtraction, 
+    none    
 };
+
+const string syntax[8] = {
+    "number",    
+    "exponent",        
+    "multiplication",  
+    "division",        
+    "addition",        
+    "subtraction",  
+};
+
 
 
 
@@ -32,7 +41,7 @@ struct Tree {
 
 };
 
-void createTree(Tree* &t, stack<AbstractSyntax> &input);
+void createPQ(Tree* &t, stack<AbstractSyntax> &input);
 void printInOrder(Tree* root);
 void deleteTree(Tree* &root);
 
@@ -46,10 +55,12 @@ int main() {
     st.push(number);
     st.push(addition);
     st.push(number);
+    st.push(subtraction);
+    st.push(number);
 
     
 
-    createTree(root, st);
+    createPQ(root, st);
 
     printInOrder(root);
 
@@ -62,7 +73,7 @@ int main() {
 //first we classify what each character is and then we can start parsing
 
 
-void createTree(Tree* &t, stack<AbstractSyntax> &input) {
+void createPQ(Tree* &t, stack<AbstractSyntax> &input) {
     while (!input.empty()) {
         AbstractSyntax s = input.top();
         input.pop();
@@ -99,7 +110,8 @@ void deleteTree(Tree* &root) {
 void printInOrder(Tree* root) {
     if (root != nullptr) {
         printInOrder(root->leftNode);
-        cout << root->value << "\n";
+        AbstractSyntax s = root->value;
+        cout << syntax[s] << s << "\n";
         printInOrder(root->rightNode);
     } 
 }
