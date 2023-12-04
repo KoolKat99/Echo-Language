@@ -2,6 +2,7 @@
 #define ASH_H
 
 #include <string>
+#include <iostream>
 
 
 
@@ -15,7 +16,7 @@ enum AbstractSyntax {
     none    
 };
 
-const string SYNTAX[6] = {
+const std::string SYNTAX[6] = {
     "number",    
     "exponent",        
     "multiplication",  
@@ -27,11 +28,13 @@ const string SYNTAX[6] = {
 
 struct Node{
     AbstractSyntax val;
+    int size;
     Node* left;
     Node* right;
 
-    Node() : val(none), left(nullptr), right(nullptr) {}
-    Node(AbstractSyntax value) : val(value), left(nullptr), right(nullptr) {}
+    Node() : val(none), size(0), left(nullptr), right(nullptr) {}
+    Node(AbstractSyntax value) : val(value), size(1), left(nullptr), right(nullptr) {}
+    Node(AbstractSyntax value, int si) : val(value), size(1 + si), left(nullptr), right(nullptr) {}
 };
 
 
@@ -52,11 +55,16 @@ class ASH {
         AbstractSyntax getVal() {return root->val; }
         Node* getRight() {return root->right; }
         Node* getLeft() {return root->left; }
+        int getSize() {return root->size; }
+
+        int getHeapSize(Node* root);
+
 
         //Setters
         void setVal(AbstractSyntax val) {root->val = val; }
         void setRight(Node* right) {root->right = right; }
         void setLeft(Node* left) {root->left = left; }
+        void setSize(int si) {root->size = si; }
 
 
         //Methods
@@ -69,13 +77,14 @@ class ASH {
 
 
         //in order to compile our code we need a way to read the tree from the leafs
-        ASH* getBranch();
+        //ASH* getBranch();
 
+        ASH& operator++();
+        ASH& operator++(int);
+        ASH& operator--();
+        ASH& operator--(int);
 
-
-
-        
-
+        friend std::ostream& operator<<(std::ostream &os, const ASH &tree);
 
 
 
